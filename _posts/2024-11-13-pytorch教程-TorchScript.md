@@ -176,7 +176,7 @@ print(loaded)
 print(loaded.code)
 ```
 
-```python
+```
 RecursiveScriptModule(
   original_name=WrapRNN
   (loop): RecursiveScriptModule(
