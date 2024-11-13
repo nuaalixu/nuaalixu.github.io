@@ -262,6 +262,7 @@ torch.onnx.export(torch_model,               # model being run
                   dynamic_axes={'input' : {0 : 'batch_size'},    # variable length axes
                                 'output' : {0 : 'batch_size'}})
 ```
+
 `torch.onnx.export()` 完成torchscript静态图到onnx静态图的转换。
 
 onnx也已经支持部分逻辑操作，如if和loop。
@@ -291,6 +292,7 @@ torch.onnx.export(foo,
                   dynamic_axes={'input_x' : {0 : 'batch_size'}, 
                                 'output' : {0 : 'batch_size'}})
 ```
+
 torchscript的graph如下：
 
 ```Plain Text
@@ -307,6 +309,7 @@ graph(%x.1 : Tensor,
       -> (%y.1)
   return (%r)
 ```
+
 将如上代码导出为onnx图，graph如下：
 
 ```Plain Text
