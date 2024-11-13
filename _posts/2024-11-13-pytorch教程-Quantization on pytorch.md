@@ -57,7 +57,7 @@ $$
 
 最简单的标定方法（Pytorch默认的）是记录运行过程中的最小值和最大值，分别指定为$\alpha$和$\beta$。TensorRT 还使用熵最小化（KL 散度）、均方误差最小化或输入范围的百分位数。
 
-![image](images/1288db60-19f4-451a-9f3e-8c96db4db2a4.png)
+![image](/images/1288db60-19f4-451a-9f3e-8c96db4db2a4.png)
 
 在 PyTorch 中，`Observer`模块收集输入值的统计信息并计算量化参数S和Z。
 
@@ -92,16 +92,16 @@ for obs in observers:
 
 **对称/缩放量化方案**将输入的裁剪范围$[\alpha,\beta]$控制为以0中心对称，此时就不需要计算zero-point了（qint时为0，\[-127, 127\]），此时$-\alpha=\beta=max(|max(r)|, |min(r)|)$。对于倾斜信号（如非负激活），可能会导致量化分辨率不佳，因为裁剪范围包含从未出现在输入中的值。
 
-![image](images/6ec5daf4-2538-4523-b68a-f1901a1b7554.png)
+![image](/images/6ec5daf4-2538-4523-b68a-f1901a1b7554.png)
 
-![image](images/3108394c-01e3-4fa4-a2ff-ed12fb88d0b9.png)
+![image](/images/3108394c-01e3-4fa4-a2ff-ed12fb88d0b9.png)
 
 
 
 ### Per-Tensor and Per-Channel Quantization Schemes
 可以整体计算层的整个权重张量的量化参数，也可以单独计算每个通道的量化参数。在每个张量中，相同的裁剪范围应用于层中的所有通道。
 
-![image](images/4ba48252-d762-4052-b4c8-65d2b62d136b.png)
+![image](/images/4ba48252-d762-4052-b4c8-65d2b62d136b.png)
 
 ### QConfig
 QConfig是一个`NamedTuple`，用来存储`Observer`以及用于量化激活和权重的量化方案。
