@@ -5,15 +5,11 @@ category: Pytorch教程
 
 # Dataset, Sampler, DataLoader
 ## 自上而下的关系
-DataLoader $\rightarrow$ mini-batch
+DataLoader：生产mini-batch，供训练；
 
-$\downarrow$
+Sampler：提供一个或多个样本索引，供采样；
 
-Sampler $\rightarrow$ indicies
-
-$\downarrow$ 
-
-Dataset  $\rightarrow$ data
+Dataset：生产一个或多个样本；
 
 ## Dataset
 数据集，将数据读取到内存，并提供访问接口。

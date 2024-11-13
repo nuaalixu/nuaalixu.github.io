@@ -159,6 +159,7 @@ bytearray 对象相当于可变的 bytes 对象。
 bytes/bytearray除了可变性差异外，几乎可以认为等同。
 
 ### 类型转换
+
 |       | str          | bytes         | int             |
 | ----- | ------------ | ------------- | --------------- |
 | str   |              | str.encode    | int()           |
