@@ -68,7 +68,7 @@ logger = logging.getLogger(__name__)
 ### Logging Flow
 其中filter既可以和logger绑定，用来过滤日志到handler，也可以和handler绑定，用来过滤日志到formatter。
 
-![image](images/41ff0659-8962-434c-9013-226c71c784ac.png)
+![image](/images/41ff0659-8962-434c-9013-226c71c784ac.png)
 
 ### Logger
 作用：
