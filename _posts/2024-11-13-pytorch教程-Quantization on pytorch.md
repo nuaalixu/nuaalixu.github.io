@@ -1,6 +1,6 @@
 ---
 layout: post
-category: Python编程
+category: Pytorch教程
 ---
 
 # Quantization on pytorch
