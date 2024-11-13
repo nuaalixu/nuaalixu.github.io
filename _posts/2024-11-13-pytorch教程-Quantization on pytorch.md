@@ -88,15 +88,15 @@ for obs in observers:
 # HistogramObserver (tensor([0.0100]), tensor([106], dtype=torch.int32))
 ```
 ### 非对称和对称量化Schemes
+
 **非对称/仿射量化方案**将输入的最小观察值和最大观察值作为裁剪范围的起止点，即$\alpha=min(r),\beta=max(r)$。仿射方案通常提供更严格的裁剪范围，对于量化非负激活非常有用。当用于权重张量时，仿射量化会导致计算成本更高的推理。
 
 **对称/缩放量化方案**将输入的裁剪范围$[\alpha,\beta]$控制为以0中心对称，此时就不需要计算zero-point了（qint时为0，\[-127, 127\]），此时$-\alpha=\beta=max(|max(r)|, |min(r)|)$。对于倾斜信号（如非负激活），可能会导致量化分辨率不佳，因为裁剪范围包含从未出现在输入中的值。
 
+
 ![image](/images/6ec5daf4-2538-4523-b68a-f1901a1b7554.png)
 
 ![image](/images/3108394c-01e3-4fa4-a2ff-ed12fb88d0b9.png)
-
-
 
 ### Per-Tensor and Per-Channel Quantization Schemes
 可以整体计算层的整个权重张量的量化参数，也可以单独计算每个通道的量化参数。在每个张量中，相同的裁剪范围应用于层中的所有通道。
