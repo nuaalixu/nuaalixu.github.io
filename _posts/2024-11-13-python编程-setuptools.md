@@ -1,3 +1,8 @@
+---
+layout: post
+category: Python编程
+---
+
 # setuptools
 ## Entry Points
 入口点是包的元数据（metadata），在包安装时暴露。作用于两个场景：

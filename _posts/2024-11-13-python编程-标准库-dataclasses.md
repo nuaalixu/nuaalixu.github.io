@@ -1,3 +1,8 @@
+---
+layout: post
+category: Python编程
+---
+
 # 标准库: dataclasses
 该模块提供了一个装饰器和函数，可以根据用户定义的类，自动生成`__init__` 、`__repr__`等方法。
 

@@ -1,3 +1,8 @@
+---
+layout: post
+category: Python编程
+---
+
 # import、module和package
 ## Package vs Module
 模块是最小的代码组织单元，包是一组模块的集合。
