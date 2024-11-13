@@ -3,7 +3,7 @@ layout: post
 category: Pytorch教程
 ---
 
-# Pytorch分布式训练
+# 分布式训练
 ## 前言
 ### 拓扑结构
 **Node**：N，节点/机器数量
