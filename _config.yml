@@ -39,4 +39,4 @@ defaults:
       path: ""
       type: post
     values:
-      categories: Other
+      category: Other
