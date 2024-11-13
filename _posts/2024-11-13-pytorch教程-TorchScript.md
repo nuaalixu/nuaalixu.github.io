@@ -52,7 +52,7 @@ graph(%self.1 : __torch__.MyCell,
 ```
 提高可读性，通过`print(traced_cell.code)`转换成遵循python语法的解释。
 
-```Plain Text
+```python
 def forward(self,
     x: Tensor,
     h: Tensor) -> Tuple[Tensor, Tensor]:
@@ -110,7 +110,7 @@ print(scripted_cell.code)
 ```
 此时控制语句会被如实解析转换：
 
-```Plain Text
+```python
 def forward(self,
     x: Tensor) -> Tensor:
   if bool(torch.gt(torch.sum(x), 0)):
@@ -175,7 +175,8 @@ loaded = torch.jit.load('wrapped_rnn.pt')
 print(loaded)
 print(loaded.code)
 ```
-```Plain Text
+
+```python
 RecursiveScriptModule(
   original_name=WrapRNN
   (loop): RecursiveScriptModule(
