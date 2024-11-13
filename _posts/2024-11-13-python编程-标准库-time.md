@@ -3,7 +3,7 @@ layout: post
 category: Python编程
 ---
 
-# 标准库-time
+# 标准库: time
 ## 预备知识
 真太阳时：观测太阳的在天空中的位置，不均匀
 

@@ -3,7 +3,7 @@ layout: post
 category: Python编程
 ---
 
-# 标准库-pathlib
+# 标准库: pathlib
 ## 基本架构
 路径类分成两类：
 

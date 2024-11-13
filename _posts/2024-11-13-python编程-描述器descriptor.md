@@ -3,7 +3,7 @@ layout: post
 category: Python编程
 ---
 
-# 描述器 descriptor
+# 描述器
 ## 定义
 任何定义了 `__get__()`, `__set__()` 或 `__delete__()` 方法的对象。当一个**类属性**为描述器时，它的特殊绑定行为就会在属性查找时被触发。
 

@@ -3,7 +3,7 @@ layout: post
 category: Python编程
 ---
 
-# 标准库-tarfile
+# 标准库: tarfile
 ## tar文件
 “tar”源自于“tape archive”，它最初是为了将数据写入不带文件系统的顺序 I/O 设备（例如使用磁带的设备）而开发的。
 
