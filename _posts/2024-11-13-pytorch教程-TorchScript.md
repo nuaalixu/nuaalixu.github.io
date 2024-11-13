@@ -6,7 +6,6 @@ category: Pytorch教程
 # TorchScript
 ## PyTorch Ecosystem
 PyTorch 支持 2 种独立的模式来处理研究和生产环境。
-
 * Eager 模式：eager execution, 运行时构建计算图，中间计算结果会立即传输给python进程。
 * Script 模式：graph execution, 直到整个图计算完成，状态才会返回到 Python 进程。两个组件，**PyTorch JIT** 和 **TorchScript ：**
    * Pytorch JIT 针对pytorch程序优化过的编译器。
@@ -39,7 +38,7 @@ traced_cell(x, h)
 ```
 通过`torch.jit.trace`转换成了TorchScript形式，通过`print(traced_cell.graph)` 获取图的描述如下：
 
-```Plain Text
+```
 graph(%self.1 : __torch__.MyCell,
       %x : Float(3, 4, strides=[4, 1], requires_grad=0, device=cpu),
       %h : Float(3, 4, strides=[4, 1], requires_grad=0, device=cpu)):
@@ -295,7 +294,7 @@ torch.onnx.export(foo,
 
 torchscript的graph如下：
 
-```Plain Text
+```
 graph(%x.1 : Tensor,
       %y.1 : Tensor):
   %3 : Tensor = aten::max(%x.1) 
@@ -312,7 +311,7 @@ graph(%x.1 : Tensor,
 
 将如上代码导出为onnx图，graph如下：
 
-```Plain Text
+```
 Exported graph: graph(%input_x : Float(*, 1, 224, 224, strides=[50176, 50176, 224, 1], requires_grad=0, device=cpu),
       %input_y : Float(10, 1, 224, 224, strides=[50176, 50176, 224, 1], requires_grad=0, device=cpu)):
   %onnx::Greater_2 : Float(device=cpu) = onnx::ReduceMax[keepdims=0](%input_x) 

@@ -8,13 +8,13 @@ category: Pytorch教程
 ### 拓扑结构
 **Node**：N，节点/机器数量
 
-**World Size：**W，所有节点的进程数量（非卡数）
+**World Size**：W，所有节点的进程数量（非卡数）
 
-**Local World Size：**L，单个节点的进程数量（非卡数）
+**Local World Size**：L，单个节点的进程数量（非卡数）
 
-**local rank：**单个节点的rank，\[0,  L-1\]
+**local rank**：单个节点的rank，\[0,  L-1\]
 
-**global rank: **全局rank，\[0, W-1\]
+**global rank**: 全局rank，\[0, W-1\]
 
 ![image](/images/9VeQp2Z2ytLKEiCCSjquVgKr06L-F_7tERDNzXoWzac.png)
 
@@ -299,7 +299,6 @@ def demo_checkpoint(rank, world_size):
     cleanup()
 ```
 总结：
-
 * 先决条件：DDP依赖c10d的`ProcessGroup`进行通讯，所以在构建DDP之前先通过`torch.distributed.init_process_group`实例化`ProcessGroup`
 * 构造：DDP构造函数需要引用本地模型`Module` ，并将rank 0进程的`state_dict()` 广播到其他进程，保持状态一致，然后每个进程创建一个本地`Reducer`，负责梯度同步。
 * 前向：DDP将输入数据传递给本地模型，进行前向计算。
