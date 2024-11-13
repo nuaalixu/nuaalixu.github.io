@@ -1,3 +1,8 @@
+---
+layout: post
+category: Python编程
+---
+
 # 标准库: contextlib
 ## with语句
 `with`语句用于包装带有使用上下文管理器定义的方法的代码块的执行。
