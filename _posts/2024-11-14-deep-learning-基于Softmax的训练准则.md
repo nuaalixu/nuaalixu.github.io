@@ -182,7 +182,7 @@ $$
 
 形式相似，但减去的margin是动态的。
 
-![image](images/3pkHulD8hRMvUDFREt7c3xwU9O2sJeKCdG50HoVLjys.png)
+![image](/images/3pkHulD8hRMvUDFREt7c3xwU9O2sJeKCdG50HoVLjys.png)
 
 如图所示，类1和类2的边界变得更大（弧度差距为2m）。
 
@@ -277,7 +277,7 @@ $$
 
 从结果上看，同类别更紧凑，不同类别间等距离分布。
 
-![image](images/6tATurgq7XgRpewjtJ52m_ojh6hE1Pmo_MI-CpgiChE.png)
+![image](/images/6tATurgq7XgRpewjtJ52m_ojh6hE1Pmo_MI-CpgiChE.png)
 
 核心思想：
 
@@ -300,7 +300,7 @@ $$
 
 * 对不同类间的等距离要求，约束了类别的随意分布，让同类分布更集中；
 
-![image](images/EN9YXFyZSadWOTzG413yG78DCzVixotyfOr6uWdqz54.png)
+![image](/images/EN9YXFyZSadWOTzG413yG78DCzVixotyfOr6uWdqz54.png)
 
 比如类A（红色）和类B（绿色）相似度高，比较难分。label smoothing的预测结果虽然还是有部分重叠，但是相对类C（蓝色）呈弧状，比基线区分度高一些。
 
