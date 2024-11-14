@@ -13,7 +13,7 @@ Module和Package都可以被import。但Module被import时，代码可见，Pack
 
 Module可以被直接执行，Package被间接执行，实际执行的是`__main__.py`的代码。
 
-```Plain Text
+```
 package
 ├── __init__.py
 ├── main.py
