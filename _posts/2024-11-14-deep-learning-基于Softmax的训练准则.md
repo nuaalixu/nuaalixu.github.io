@@ -5,7 +5,7 @@ tag: speaker verification
 ---
 
 # 基于Softmax的训练准则
-# Introduction
+## Introduction
 说话人验证（SV）技术的训练准则主要有两大类：
 
 * 基于度量学习（Metric Learning）的方法：旨在学习数据样本之间的度量或距离度量，目标是使同一类别样本之间的距离尽可能小，而不同类别样本之间的距离尽可能大。例如，triplet loss, angular loss，InfoNCE loss等;
@@ -24,7 +24,7 @@ tag: speaker verification
 
 另外，附加部分聊一聊分类模型训练常用的label smoothing方法。
 
-# Softmax
+## Softmax
 函数图：
 
 ![image](/images/aA1r9PokJmzBU0VSjwdMNRgLHIWs47Z_aYVFq5SFvz0.png)
@@ -61,7 +61,7 @@ $$
 
 Softmax擅长优化类之间（inter-class）的差异——让不同类更容易区分，但不擅长减少类内（intra-class）差异——让同一类更紧致。
 
-# A-Softmax/SphereFace
+## A-Softmax/SphereFace
 **Motivation**
 
 传统的Softmax方法，将样本i分类到对应的类别，等价于优化目标为:
@@ -122,7 +122,7 @@ m控制着期望夹角的范围，m越大，同类特征更紧致，不同类角
 
 图中*Angular Margin*和m正相关。
 
-# AM-Softmax/CosineFace
+## AM-Softmax/CosineFace
 类比于A-Softmax，通过$m$乘以$\theta$，来引入角度余量，让类内夹角更小。
 
 AM-Softmax，通过$cos\theta-m$的方式，来引入余弦余量。
@@ -153,7 +153,7 @@ $$
 * 更简单，更容易收敛；
 * 更明显的性能提升；
 
-# AAM-Softmax/ArcFace
+## AAM-Softmax/ArcFace
 **Motivation**
 
 虽然AM-Softmax比A-Softmax更简单，但是在几何角度，A-Softmax的角度余量方面比余弦余量更直观，角度余量就对应着不同类边界在超球面上的弧度距离。
@@ -186,7 +186,7 @@ $$
 
 如图所示，类1和类2的边界变得更大（弧度差距为2m）。
 
-# SphereFace2
+## SphereFace2
 **Motivation**
 
 旨在于进一步优化close-set训练和open-set评估之间说话人的mismatch问题。
@@ -251,7 +251,7 @@ $$
 
 $L_i$可以看作K个二分类logistic回归损失的和。
 
-# Appendix：Label Smoothing
+## Appendix：Label Smoothing
 **传统SoftmaxCE**
 
 最小化如下目标（对数域）：
