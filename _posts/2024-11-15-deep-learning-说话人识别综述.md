@@ -4,11 +4,12 @@ title: "speaker recognization overview"
 category: Deep Learning
 tag: speaker recognization
 ---
-# speaker recognization overview
+
+# 说话人识别综述
 ## 引言
 ![image](/images/8gHFs93EK76fhTTxTDy14w9GKTTQhhiIx5o3T3r7xsc.png)
 
-speaker recognization主要的子任务
+说话人识别（speaker recognization）主要的子任务
 
 * speaker verification：基于一个说话人的录音，验证输入语音是否属于该说话人，即1对1的比对。
 * speaker identification：从多个说话人库中，检索输入语音属于哪个说话人，即1对多的比对。
@@ -503,7 +504,7 @@ $C$是为了让学习到的表征始终保持说话人区分性。
 DANN（Domain-adversarial NN）是领域适应训练的一个具体实现，它增加了一个对网络的限制，即$M_s$和$M_t$共享同一个网络。
 
 #### 基于数据重建
-CycleGAN
+例如：CycleGAN
 
 #### 基于差异
 基于差异的领域适应方法使用统计准则，如MMD、CORAL、KL散度等，来对齐源领域和目标领域的统计学分布。
@@ -528,7 +529,7 @@ CycleGAN
 ### relative equal error rate (EER)
 ![image](/images/fJJ5Vnz6WE2PqrRj9l2nw1gv1m-Nn2ycMWgicA4DwvY.png)
 
-ROC
+#### ROC
 
 适用于衡量二分类系统的阈值变化影响。
 
@@ -542,7 +543,7 @@ $$
 FPR=\frac{FP}{FP+TN}=1-TNR
 $$
 
-EER
+#### EER
 
 等错误率代表FPR和FNR（1-TPR）相等的点，值越小越好。
 
@@ -568,11 +569,12 @@ Rich Transcription Time Marked (RTTM) 文件以空格作为各域的分隔符，
 
 例如：
 
-```Plain Text
+```
 SPEAKER CMU_20020319-1400_d01_NONE 1 130.430000 2.350 <NA> <NA> juliet <NA> <NA>
 SPEAKER CMU_20020319-1400_d01_NONE 1 157.610000 3.060 <NA> <NA> tbc <NA> <NA>
 SPEAKER CMU_20020319-1400_d01_NONE 1 130.490000 0.450 <NA> <NA> chek <NA> <NA>
 ```
+
 ### UEM
 Un-partitioned evaluation map (UEM)文件用于标记每个记录的评估区域。它的作用是去掉不在评估区域的标注，并不统计评估区域外的系统输出（错误）。
 
