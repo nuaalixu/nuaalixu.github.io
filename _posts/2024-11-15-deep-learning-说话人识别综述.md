@@ -4,8 +4,8 @@ title: "speaker recognization overview"
 category: Deep Learning
 tag: speaker recognization
 ---
-
-# 引言
+# speaker recognization overview
+## 引言
 ![image](/images/8gHFs93EK76fhTTxTDy14w9GKTTQhhiIx5o3T3r7xsc.png)
 
 speaker recognization主要的子任务
@@ -17,7 +17,7 @@ speaker recognization主要的子任务
 
 ![image](/images/iZ2bioE4PnBQac89lGl6SfSJM_7J_drGNEmqHIXIbH4.png)
 
-# Speaker Verification
+## Speaker Verification
 说话人验证有两种范式：分步式和端到端。
 
 分步式一般包括特征提取和相似度计算两个步骤。
@@ -28,8 +28,8 @@ speaker recognization主要的子任务
 
 ![image](/images/s_jQUKAF9FHIT9Md54XBAPiCF_JwdxwIAOqSGBdB_Vc.png)
 
-## 经典方法
-### GMM-UBM
+### 经典方法
+#### GMM-UBM
 Universal Background Model (UBM)是一个大型 GMM（如512到2048 个混合），经过训练来表示与说话者无关的特征分布。
 
 ![image](/images/ABYjUB5xbur7XpzfULPKKp_APHqKlshaEoF2R9gxEdY.png)
@@ -67,7 +67,7 @@ Verify
 
 对于一条待测样本，先计算各注册说话人模型的似然概率，然后减去UBM的似然概率，得到每个注册说话人的的LR。通过阈值来判断是否接受。
 
-### GMM-UBM/i-vector
+#### GMM-UBM/i-vector
 GMM-UBM方法容易受到说话人发音变化和信道变化的干扰。 
 
 说话人/会话可变性：因信道不同、音素不同和说话人身体变化等，同一个说话人的不同录音会有变化。
@@ -104,7 +104,7 @@ ivector就是w分布的均值作为特征。
 
 ![image](/images/PBSTYNlZM0priuubh7TNgWf1oR1a4vDIu_oFY71s6MY.png)
 
-### DNN-UBM/i-vector
+#### DNN-UBM/i-vector
 计算i-vector所需要的统计量，都是从语音帧的后验概率收集得到的。
 
 理论上，可以使用其他模型来替代GMM-UBM产生后验。
@@ -117,16 +117,16 @@ DNN-UBM/i-vector框架利用ASR的DNN声学模型替代GMM-UBM。
 
 ![image](/images/1foLe6lf4v0vHnoyZbJCV--7JdNNEqe2oi1JX6lMclw.png)
 
-### DNN-BNF/i-vector
+#### DNN-BNF/i-vector
 提取DNN的bottleneck特征，用于因子分析，生成i-vector。
 
 DNN可以是ASR的音素分类模型，也可以是说话人分类模型。
 
 DNN-BNF方法是在特征层面的改动，比MFCC特征效果更好。
 
-![image](images/i8zcSU8h-4zb2DeDasYDdtYVWIVimt0UgAk5ib6-xK8.png)
+![image](/images/i8zcSU8h-4zb2DeDasYDdtYVWIVimt0UgAk5ib6-xK8.png)
 
-## Deep embedding
+### Deep embedding方法
 Deep embedding是使用DNN将说话人嵌入到一个向量空间。
 
 两个典型的深度embedding：
@@ -149,7 +149,7 @@ Deep embedding系统有四个关键部分：
 * 时间池化；
 * 目标函数；
 
-### 网络结构和输入
+#### 网络结构和输入
 TDNN：沿时间轴的一维卷积作为特征提取器。被x-vector架构采用。
 
 ResNet：沿时间和频率维度的2D卷积。
@@ -162,24 +162,27 @@ CNN+RNN混合架构能增强性能。
 
 目前卷积类网络和Fbank/MFCC特征居多。
 
-### 时间池化层
+#### 时间池化层
 时间池化层是帧级别隐层和句子级别隐层间的桥梁。
 
-#### 平均池化
+**平均池化**
+
 平均池化最常用：
 
 $$
 \mathbf{u} = \frac{1}{T}\sum_{t=1}^{T}\mathbf{h}_t
 $$
 
-#### 统计池化
+**统计池化**
+
 计算特征向量的均值和标准差，拼接成新向量。
 
 $$
 \mathbf{u}=[\mathbf{m}^T,\mathbf{d}^T]^T
 $$
 
-#### 基于self-attention的池化
+**基于self-attention的池化**
+
 无论是平均池化还是统计池化，均假设所有帧贡献相当。
 
 self-attention池化相当于加权平均，按照QKV机制，这里的Q是frame-level层的最后一层的输出H，K是权重向量，V也是H。
@@ -210,68 +213,76 @@ $$
 \mathbf{u}=[\mathbf{\widetilde{m}}^{(1)^T},\mathbf{\widetilde{m}}^{(2)^T},...,\mathbf{\widetilde{m}}^{(K)^T}]^T
 $$
 
-#### NetVLAD池化
+**NetVLAD池化**
+
 Vector of Locally Aggregated Descriptors，局部聚合描述符向量。
 
 NetVLAD是基于VLAD开发的带可训练参数的池化层，可以理解成可训练的聚类。
 
 隐层变量$W\times H\times D$、隐变量展开$N\times D$、聚类M个类，算中心点残差N\*M个，每个类N个残差聚合成1个，最后固定维度$M\times D$.
 
-#### LDE池化
+**LDE池化**
+
 learnable dictionary encoding (LDE) 
 
-#### Spatial pyramid pooling
+**patial pyramid pooling**
+
 全局平均池化可以实现变长输入投影到固定维度，但是会丢失空间信息。
 
 spatial pyramid pooling其实就是将输入分割成固定数量的块，每块内部进行平均池化得到固定大小的向量，各块向量拼接形成新向量。分割数量按照锥形设置多组，最少为一，相当于全局池化。多组向量拼接形成池化后的特征。
 
 ![image](/images/Z6-Py034gmEkLewbYfgw8SjvHjVSZC5Pg4bJWrOtU5o.png)
 
-### 目标函数
+#### 目标函数
 通常采用基于分类的目标函数。
 
 但是说话人验证是一个开集任务，取的是deep embedding，所以看重的是特征区分性，而不是最终的分类准确率。
 
-#### softmax的变体
-softmax函数促进不同类间的差异最大化，但对于类内的差异没有显式约束，使其最小化。
+**softmax的变体**
 
-Angular softmax (ASoftmax) loss
+softmax函数促进不同类间的差异最大化，但对于类内的差异没有显式约束，使其最小化。典型的有：
 
-Additive margin softmax (AMSoftmax) loss
+1. Angular softmax (ASoftmax) loss
 
-Additive angular margin softmax (AAMSoftmax) loss
+2. Additive margin softmax (AMSoftmax) loss
+
+3. Additive angular margin softmax (AAMSoftmax) loss
 
 相比于基础softmax，以上几种变体让学习到的特征符合角度分布，这与后端的余弦相似度打分相匹配。此外引入的余弦余量通过定量地控制类间的决策边界从而最小化类内方差。
 
-#### softmax的正则化
+**softmax的正则化**
+
 通过给softmax增加正则化项，来提升分类区分性。
 
 $$
 \mathcal{L} = \mathcal{L}_S+\lambda\mathcal{L}_{Regular}
 $$
 
-Center loss
+典型的包括：
 
-每个batch，embedding向量和所属类的中心点向量欧氏距离作为正则项，类的中心点向量训练时会更新。
+1. Center loss
+
+&emsp;&emsp;每个batch，embedding向量和所属类的中心点向量欧氏距离作为正则项，类的中心点向量训练时会更新。
 
 $$
 \mathcal{L}_C=\frac{1}{2}\sum^N_{n=1}||\mathbf{e}_n-\mathbf{c}_{l_n}||^2
 $$
 
-Ring loss
+2. Ring loss
 
-将embedding向量的L1范数限制在某个目标值R。
+&emsp;&emsp;将embedding向量的L1范数限制在某个目标值R。
 
-Minimum hyperspherical energy criterion
+3. Minimum hyperspherical energy criterion
 
-Gaussian prior
+4. Gaussian prior
 
-Triplet loss
+5. Triplet loss
 
-#### 多任务学习
+**多任务学习**
+
 尽管直观上文本内容可能对文本无关的说话人识别有害，但很多实验证明引入文本的音素信息对说话人识别有帮助。
 
-### 端到端方法
+#### 端到端方法
 输入一对语音段，模型输出相似度得分。
 
 和deep embedding方法的主要差异在于损失函数。
@@ -287,52 +298,54 @@ Triplet loss
 1. 说话人验证是面向开集的学习，基于验证的损失函数和测试保持一致，可以直接输出验证分数；
 2. 基于验证的损失函数，使输出层不会随着训练集说话人数量增加而变得巨大。
 
-端到端系统最大的缺点是难以训练，包括样本对生成和模型难收敛。
+端到端系统最大的缺点是难以训练，包括样本对生成和模型难收敛。常用的可以有以下几类：
 
-#### Pairwise loss
-用一对样本对计算损失函数。
+**Pairwise loss**
 
-Binary cross-entropy loss
+用一对样本对计算损失函数。典型包括：
 
-最常用的是binary cross-entropy loss（BCE）。
+1. Binary cross-entropy loss
+
+&emsp;&emsp;最常用的是binary cross-entropy loss（BCE）。
 
 $$
 \mathcal{L}_{BCE}=-\sum^N_{n=1}[l_n\ln(p(\mathbf{x}^e_n,\mathbf{x}^t_n))+\eta(1-l_n)\ln(1-p(\mathbf{x}^e_n,\mathbf{x}^t_n))]
 $$
 
-$x^e_n$和$x^t_n$分别是待验证的两条说话人特征，$l_n$是这一对特征的是否同一人的真实标签。
+&emsp;&emsp;$x^e_n$和$x^t_n$分别是待验证的两条说话人特征，$l_n$是这一对特征的是否同一人的真实标签。
 
-这是一个标准的BCE loss，引入$\eta$是为了平衡不属于同一人的样本对占全体的比重。
+&emsp;&emsp;这是一个标准的BCE loss，引入$\eta$是为了平衡不属于同一人的样本对占全体的比重。
 
-$p(\mathbf{x}^e_n,\mathbf{x}^t_n)$是一对样本输入同一人的概率，可以理解为相似度，不同BCE loss的变体正是对概率计算的改动。
+&emsp;&emsp;$p(\mathbf{x}^e_n,\mathbf{x}^t_n)$是一对样本输入同一人的概率，可以理解为相似度，不同BCE loss的变体正是对概率计算的改动。
 
-有用余弦相似度+sigmoid函数的方法。
+&emsp;&emsp;有用余弦相似度+sigmoid函数的方法。
 
-有基于PLDA的相似度计算方法。
+&emsp;&emsp;有基于PLDA的相似度计算方法。
 
-还有直接利用神经网络计算相似度得分的方法。
+&emsp;&emsp;还有直接利用神经网络计算相似度得分的方法。
 
-Contrastive loss
+2. Contrastive loss
 
-对比学习的损失函数是另一个常用方法。
+&emsp;&emsp;对比学习的损失函数是另一个常用方法。
 
 $$
 \mathcal{L}_C=\frac{1}{2N}\sum_{n=1}^N(l_nd^2_n+(1-ln)\max(\rho-d_n,0)^2)
 $$
 
-$d_n$表示两个embedding样本对间的欧氏距离，$\rho$是手动定义的余量，平衡$d_n$上界。
+&emsp;&emsp;$d_n$表示两个embedding样本对间的欧氏距离，$\rho$是手动定义的余量，平衡$d_n$上界。
 
-可以看到最小化该损失函数，就是让同类距离变小，不同类距离变大。
+&emsp;&emsp;可以看到最小化该损失函数，就是让同类距离变小，不同类距离变大。
 
-对比学习损失函数过于难训练，可以使用softmax预训练，Contrastive微调。
+&emsp;&emsp;对比学习损失函数过于难训练，可以使用softmax预训练，Contrastive微调。
 
-Discriminant analysis loss
+3. Discriminant analysis loss
 
-false alarm rate and miss detection rate
+4. false alarm rate and miss detection rate
 
-直接最小化$P_{fa}$和$P_{miss}$的加权和，作为目标函数。为了可导，使用sigmoid替代统计指标的指示函数。
+&emsp;&emsp;直接最小化$P_{fa}$和$P_{miss}$的加权和，作为目标函数。为了可导，使用sigmoid替代统计指标的指示函数。
 
-#### Triplet loss
+**Triplet loss**
+
 由三条语料构成一个训练输入，其中两条来自同一个说话人，分别充当锚点语料和正语料，第三条来自不同说话人，充当负语料。
 
 triplet loss旨在于使锚点语料和正语料相似度更高，让锚点语料和负语料相似度下降。即旨在于：
@@ -356,20 +369,22 @@ $$
 1. 随机采样同一个说话人的两个样本，用作锚点和正样本；
 2. 对每个锚点，从剩下的说话人样本中，随机选择一个满足$\max(0,s^{an}_n-s^{ap}_n+\zeta) \gt 0$的负样本。
 
-#### Quadruplet loss
+**Quadruplet loss**
+
 四条语料构成一个训练输入，其中两条来自同一个说话人$\mathcal{X}_{same}$，另外两条来自另一个说话人$\mathcal{X}_{diff}$。
 
 四元损失函数可以看作最大化ROC曲线下某个指定区间的面积，即最大化pAUC。
 
-#### Prototypical network loss
+**Prototypical network loss**
+
 最初是用于few-shot learning的。
 
-# Speaker Identification
+## Speaker Identification
 说话人鉴别是说话人验证的泛化表示，多个说话人和特定单一说话人的区别。
 
 它们涉及的基础技术一致。
 
-# Speaker Diarization
+## Speaker Diarization
 说话人分离也有分步方法和端到端方法。
 
 分步方法和说话人验证有联系和区别。
@@ -384,7 +399,7 @@ $$
 
 ![image](/images/7pDhFEbWB1mD37zL1q-KihvWlWUeGOZUKcQZhgJdWjQ.png)
 
-## 分步式
+### 分步式
 ![image](/images/hxkuLiPEWS58FfttvpAFjrLBgiethD3jWO5P2a5eSmQ.png)
 
 大部分分布式说话人分离主要包含四个模块：
@@ -400,16 +415,16 @@ $$
 
 重叠部分会影响聚类性能，可以被检测然后丢弃。
 
-### 片段分割
+#### 片段分割
 两种类别：
 
 * 平均分割，比如固定1.5s的窗长和0.75s的重叠；
 * 说话人改变检测（SCD），检查说话人切换点，进行切分；
 
-### 特征提取
+#### 特征提取
 和说话人验证的特征提取基本相同，如i-vector,x-vector等；
 
-### 说话人聚类
+#### 说话人聚类
 说话人聚类指将片段级别的特征分成几组，每组代表一个说话人。
 
 关键：
@@ -419,7 +434,7 @@ $$
 
 无监督的聚类算法无法利用标签数据，所以提出将说话人聚类看作半监督学习问题和全监督学习问题。
 
-## 端到端方法
+### 端到端方法
 因为传统聚类算法是无监督的，所以其无法直接最小化话者分离误差，并且难以处理重叠片段。
 
 此外，分布式架构的各模块是独立优化，整体性能难以一致保证。
@@ -431,14 +446,14 @@ $$
 * 传统方法将其视为每一帧的多分类问题，允许重叠，因为标签序号不定，所以要用PIT训练，说话人最大容量在训练时就确定，且PIT复杂度受说话人数量限制。
 * Speaker-wise conditional （SC-EEND）方法，使用编解码器的架构，去逐个生成每个说话人的语音段，同样受PIT限制。
 
-## 实时话者分离
+### 实时话者分离
 也可以分成分步式和端到端式。
 
 分布式：将聚类模块替换成可以支持实时推理的NN进行决策；
 
 端到端式：将离线话者分类改成chunk做，但要解决每个chunk说话人排列/序号不一致问题。
 
-## 多模态话者分离
+### 多模态话者分离
 研究语音和其他模态信息的结合，如语言学信息（音律、文本等），说话人行为（嘴唇等）。
 
 常见的模态融合：
@@ -447,7 +462,7 @@ $$
 * audio-visual
 * 麦克风空间信息
 
-# 鲁棒说话人识别
+## 鲁棒说话人识别
 主要问题：
 
 * domain mismatch
@@ -459,7 +474,7 @@ $$
 * speech enhancement
 * data augmentation
 
-## 领域适应
+### 领域适应
 domain包括language、channel、phoneme/text、noise等
 
 domain adaptation：使用source domain的数据解决target domain的问题。
@@ -472,7 +487,7 @@ target domain也有数据，本文着眼于无标签的target domain训练数据
 * 基于数据重建的
 * 基于差异的
 
-### 基于对抗性训练
+#### 基于对抗性训练
 目标：对于对抗性训练的领域适应方法旨在于使学习到的源领域的表征$M_s(X_s)$和目标领域的表征$M_t(X_t)$分布一致。
 
 框架：
@@ -487,20 +502,20 @@ $C$是为了让学习到的表征始终保持说话人区分性。
 
 DANN（Domain-adversarial NN）是领域适应训练的一个具体实现，它增加了一个对网络的限制，即$M_s$和$M_t$共享同一个网络。
 
-### 基于数据重建
+#### 基于数据重建
 CycleGAN
 
-### 基于差异
+#### 基于差异
 基于差异的领域适应方法使用统计准则，如MMD、CORAL、KL散度等，来对齐源领域和目标领域的统计学分布。
 
-## 语音增强和去混响
+### 语音增强和去混响
 基于深度学习的语音增强和去混响可以分成三类：
 
 * masking-based
 * mapping-based
 * GAN-based
 
-## 数据增广
+### 数据增广
 大规模的数据仍然是提高说话人识别鲁棒性的有效方法。
 
 和语音识别常用增广方法基本一致：
@@ -509,8 +524,8 @@ CycleGAN
 * speed and pitch perturbation
 * spectral augmentation
 
-# 评价指标
-## relative equal error rate (EER)
+## 评价指标
+### relative equal error rate (EER)
 ![image](/images/fJJ5Vnz6WE2PqrRj9l2nw1gv1m-Nn2ycMWgicA4DwvY.png)
 
 ROC
@@ -536,8 +551,8 @@ EER
 * FNR：有准入资格的人被拒之门外的怒火；
 * FPR：无准入资格的人入侵的风险；
 
-# 标注文件
-## RTTM
+## 标注文件
+### RTTM
 Rich Transcription Time Marked (RTTM) 文件以空格作为各域的分隔符，每行一组数据，包括十个域:
 
 * `Type` -- segment type; should always by `SPEAKER`
@@ -558,7 +573,7 @@ SPEAKER CMU_20020319-1400_d01_NONE 1 130.430000 2.350 <NA> <NA> juliet <NA> <NA>
 SPEAKER CMU_20020319-1400_d01_NONE 1 157.610000 3.060 <NA> <NA> tbc <NA> <NA>
 SPEAKER CMU_20020319-1400_d01_NONE 1 130.490000 0.450 <NA> <NA> chek <NA> <NA>
 ```
-## UEM
+### UEM
 Un-partitioned evaluation map (UEM)文件用于标记每个记录的评估区域。它的作用是去掉不在评估区域的标注，并不统计评估区域外的系统输出（错误）。
 
 * `File ID` -- file name; basename of the recording minus extension (e.g., `rec1_a`)
