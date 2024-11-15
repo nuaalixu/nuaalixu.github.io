@@ -2,7 +2,7 @@
 layout: post
 title: "speaker recognization overview"
 category: Deep Learning
-tag: speaker recognization
+tags: ["speaker recognization", overview]
 ---
 
 # 说话人识别综述
@@ -37,7 +37,7 @@ Universal Background Model (UBM)是一个大型 GMM（如512到2048 个混合）
 
 在说话人验证系统中，UBM 是一种与说话人无关的高斯混合模型 (GMM)，使用来自大量说话人的语音样本进行训练，以表示一般语音特征。使用来自特定注册说话人的语音样本训练，得到表示特定说话人特征的GMM。对于一条未知样本，可以计算特定说话人模型和 UBM 的匹配分数之间的似然比(Likelihood Ratio)，从而判断样本的说话人。 此外UBM还可以充当特定说话人GMM训练时最大后验概率 (MAP) 参数估计中的先验模型。
 
-UBM: Train
+Train
 
 UBM使用全部说话人样本，训练一个说话人无关的通用GMM。
 
@@ -166,7 +166,7 @@ CNN+RNN混合架构能增强性能。
 #### 时间池化层
 时间池化层是帧级别隐层和句子级别隐层间的桥梁。
 
-**平均池化**
+##### 平均池化
 
 平均池化最常用：
 
@@ -174,7 +174,7 @@ $$
 \mathbf{u} = \frac{1}{T}\sum_{t=1}^{T}\mathbf{h}_t
 $$
 
-**统计池化**
+#### 统计池化
 
 计算特征向量的均值和标准差，拼接成新向量。
 
@@ -182,7 +182,7 @@ $$
 \mathbf{u}=[\mathbf{m}^T,\mathbf{d}^T]^T
 $$
 
-**基于self-attention的池化**
+##### 基于self-attention的池化
 
 无论是平均池化还是统计池化，均假设所有帧贡献相当。
 
@@ -214,7 +214,7 @@ $$
 \mathbf{u}=[\mathbf{\widetilde{m}}^{(1)^T},\mathbf{\widetilde{m}}^{(2)^T},...,\mathbf{\widetilde{m}}^{(K)^T}]^T
 $$
 
-**NetVLAD池化**
+##### NetVLAD池化
 
 Vector of Locally Aggregated Descriptors，局部聚合描述符向量。
 
@@ -222,11 +222,11 @@ NetVLAD是基于VLAD开发的带可训练参数的池化层，可以理解成可
 
 隐层变量$W\times H\times D$、隐变量展开$N\times D$、聚类M个类，算中心点残差N\*M个，每个类N个残差聚合成1个，最后固定维度$M\times D$.
 
-**LDE池化**
+##### LDE池化
 
 learnable dictionary encoding (LDE) 
 
-**patial pyramid pooling**
+##### patial pyramid pooling
 
 全局平均池化可以实现变长输入投影到固定维度，但是会丢失空间信息。
 
@@ -239,7 +239,7 @@ spatial pyramid pooling其实就是将输入分割成固定数量的块，每块
 
 但是说话人验证是一个开集任务，取的是deep embedding，所以看重的是特征区分性，而不是最终的分类准确率。
 
-**softmax的变体**
+##### softmax的变体
 
 softmax函数促进不同类间的差异最大化，但对于类内的差异没有显式约束，使其最小化。典型的有：
 
@@ -251,7 +251,7 @@ softmax函数促进不同类间的差异最大化，但对于类内的差异没�
 
 相比于基础softmax，以上几种变体让学习到的特征符合角度分布，这与后端的余弦相似度打分相匹配。此外引入的余弦余量通过定量地控制类间的决策边界从而最小化类内方差。
 
-**softmax的正则化**
+##### softmax的正则化
 
 通过给softmax增加正则化项，来提升分类区分性。
 
@@ -279,7 +279,7 @@ $$
 
 5. Triplet loss
 
-**多任务学习**
+##### 多任务学习
 
 尽管直观上文本内容可能对文本无关的说话人识别有害，但很多实验证明引入文本的音素信息对说话人识别有帮助。
 
@@ -301,7 +301,7 @@ $$
 
 端到端系统最大的缺点是难以训练，包括样本对生成和模型难收敛。常用的可以有以下几类：
 
-**Pairwise loss**
+##### Pairwise loss
 
 用一对样本对计算损失函数。典型包括：
 
@@ -345,7 +345,7 @@ $$
 
 &emsp;&emsp;直接最小化$P_{fa}$和$P_{miss}$的加权和，作为目标函数。为了可导，使用sigmoid替代统计指标的指示函数。
 
-**Triplet loss**
+##### Triplet loss
 
 由三条语料构成一个训练输入，其中两条来自同一个说话人，分别充当锚点语料和正语料，第三条来自不同说话人，充当负语料。
 
@@ -370,13 +370,13 @@ $$
 1. 随机采样同一个说话人的两个样本，用作锚点和正样本；
 2. 对每个锚点，从剩下的说话人样本中，随机选择一个满足$\max(0,s^{an}_n-s^{ap}_n+\zeta) \gt 0$的负样本。
 
-**Quadruplet loss**
+##### Quadruplet loss
 
 四条语料构成一个训练输入，其中两条来自同一个说话人$\mathcal{X}_{same}$，另外两条来自另一个说话人$\mathcal{X}_{diff}$。
 
 四元损失函数可以看作最大化ROC曲线下某个指定区间的面积，即最大化pAUC。
 
-**Prototypical network loss**
+##### Prototypical network loss
 
 最初是用于few-shot learning的。
 
