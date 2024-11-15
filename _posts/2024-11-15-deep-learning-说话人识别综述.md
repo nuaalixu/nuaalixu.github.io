@@ -1,6 +1,6 @@
 ---
 layout: post
-title: speaker recognization overview
+title: "speaker recognization overview"
 category: Deep Learning
 tag: speaker recognization
 ---
