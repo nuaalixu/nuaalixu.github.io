@@ -166,39 +166,39 @@ CNN+RNN混合架构能增强性能。
 #### 时间池化层
 时间池化层是帧级别隐层和句子级别隐层间的桥梁。
 
-平均池化
+* 平均池化
 
-平均池化最常用：
+&emsp;&emsp;平均池化最常用：
 
 $$
 \mathbf{u} = \frac{1}{T}\sum_{t=1}^{T}\mathbf{h}_t
 $$
 
-#### 统计池化
+* 统计池化
 
-计算特征向量的均值和标准差，拼接成新向量。
+&emsp;&emsp;计算特征向量的均值和标准差，拼接成新向量。
 
 $$
 \mathbf{u}=[\mathbf{m}^T,\mathbf{d}^T]^T
 $$
 
-基于self-attention的池化
+* 基于self-attention的池化
 
-无论是平均池化还是统计池化，均假设所有帧贡献相当。
+&emsp;&emsp;无论是平均池化还是统计池化，均假设所有帧贡献相当。
 
-self-attention池化相当于加权平均，按照QKV机制，这里的Q是frame-level层的最后一层的输出H，K是权重向量，V也是H。
+&emsp;&emsp;self-attention池化相当于加权平均，按照QKV机制，这里的Q是frame-level层的最后一层的输出H，K是权重向量，V也是H。
 
-首先计算权重：
+&emsp;&emsp;首先计算权重：
 
 $$
 \mathbf{a}^{(k)} = softmax(\mathbf{w_{s2}}^{(k)}tanh(W_{s1}^{(k)}H^T)), k=1,2,...,K
 $$
 
-重点是$\mathbf{w_{s2}}$向量用点积来计算每一帧的权重，是一个可学习的参数。k表示可以有多个头，学习不同空间的权重。
+&emsp;&emsp;重点是$\mathbf{w_{s2}}$向量用点积来计算每一帧的权重，是一个可学习的参数。k表示可以有多个头，学习不同空间的权重。
 
 ![image](/images/IrxsOtNUcmF8nYtIpgTP9AkdOV43r8rwEMH11A_4qsI.png)
 
-权重学习到后，可以求的加权平均值和对应标准差：
+&emsp;&emsp;权重学习到后，可以求的加权平均值和对应标准差：
 
 $$
 \mathbf{\widetilde{m}}^{(k)}=\sum^T_{t=1}\alpha^{(k)}_t\mathbf{h}_t
@@ -208,29 +208,29 @@ $$
 \mathbf{\widetilde{d}}^{(k)}=\sqrt{\sum^T_{t=1}\alpha_t(\mathbf{h}_t-\mathbf{\widetilde{m}}^{(k)})^2}
 $$
 
-在注意力框架下，时间池化层有多种具体的实现，最简单的方法是直接利用多头的加权平均值：
+&emsp;&emsp;在注意力框架下，时间池化层有多种具体的实现，最简单的方法是直接利用多头的加权平均值：
 
 $$
 \mathbf{u}=[\mathbf{\widetilde{m}}^{(1)^T},\mathbf{\widetilde{m}}^{(2)^T},...,\mathbf{\widetilde{m}}^{(K)^T}]^T
 $$
 
-NetVLAD池化
+* NetVLAD池化
 
-Vector of Locally Aggregated Descriptors，局部聚合描述符向量。
+&emsp;&emsp;Vector of Locally Aggregated Descriptors，局部聚合描述符向量。
 
-NetVLAD是基于VLAD开发的带可训练参数的池化层，可以理解成可训练的聚类。
+&emsp;&emsp;NetVLAD是基于VLAD开发的带可训练参数的池化层，可以理解成可训练的聚类。
 
-隐层变量$W\times H\times D$、隐变量展开$N\times D$、聚类M个类，算中心点残差N\*M个，每个类N个残差聚合成1个，最后固定维度$M\times D$.
+&emsp;&emsp;隐层变量$W\times H\times D$、隐变量展开$N\times D$、聚类M个类，算中心点残差N\*M个，每个类N个残差聚合成1个，最后固定维度$M\times D$.
 
-LDE池化
+* LDE池化
 
-learnable dictionary encoding (LDE) 
+&emsp;&emsp;learnable dictionary encoding (LDE) 
 
-patial pyramid pooling
+* patial pyramid pooling
 
-全局平均池化可以实现变长输入投影到固定维度，但是会丢失空间信息。
+&emsp;&emsp;全局平均池化可以实现变长输入投影到固定维度，但是会丢失空间信息。
 
-spatial pyramid pooling其实就是将输入分割成固定数量的块，每块内部进行平均池化得到固定大小的向量，各块向量拼接形成新向量。分割数量按照锥形设置多组，最少为一，相当于全局池化。多组向量拼接形成池化后的特征。
+&emsp;&emsp;spatial pyramid pooling其实就是将输入分割成固定数量的块，每块内部进行平均池化得到固定大小的向量，各块向量拼接形成新向量。分割数量按照锥形设置多组，最少为一，相当于全局池化。多组向量拼接形成池化后的特征。
 
 ![image](/images/Z6-Py034gmEkLewbYfgw8SjvHjVSZC5Pg4bJWrOtU5o.png)
 
@@ -239,9 +239,9 @@ spatial pyramid pooling其实就是将输入分割成固定数量的块，每块
 
 但是说话人验证是一个开集任务，取的是deep embedding，所以看重的是特征区分性，而不是最终的分类准确率。
 
-softmax的变体
+* softmax的变体
 
-softmax函数促进不同类间的差异最大化，但对于类内的差异没有显式约束，使其最小化。典型的有：
+&emsp;&emsp;softmax函数促进不同类间的差异最大化，但对于类内的差异没有显式约束，使其最小化。典型的有：
 
 1. Angular softmax (ASoftmax) loss
 
@@ -249,17 +249,17 @@ softmax函数促进不同类间的差异最大化，但对于类内的差异没�
 
 3. Additive angular margin softmax (AAMSoftmax) loss
 
-相比于基础softmax，以上几种变体让学习到的特征符合角度分布，这与后端的余弦相似度打分相匹配。此外引入的余弦余量通过定量地控制类间的决策边界从而最小化类内方差。
+&emsp;&emsp;相比于基础softmax，以上几种变体让学习到的特征符合角度分布，这与后端的余弦相似度打分相匹配。此外引入的余弦余量通过定量地控制类间的决策边界从而最小化类内方差。
 
-softmax的正则化
+* softmax的正则化
 
-通过给softmax增加正则化项，来提升分类区分性。
+&emsp;&emsp;通过给softmax增加正则化项，来提升分类区分性。
 
 $$
 \mathcal{L} = \mathcal{L}_S+\lambda\mathcal{L}_{Regular}
 $$
 
-典型的包括：
+&emsp;&emsp;典型的包括：
 
 1. Center loss
 
@@ -279,9 +279,9 @@ $$
 
 5. Triplet loss
 
-多任务学习
+* 多任务学习
 
-尽管直观上文本内容可能对文本无关的说话人识别有害，但很多实验证明引入文本的音素信息对说话人识别有帮助。
+&emsp;&emsp;尽管直观上文本内容可能对文本无关的说话人识别有害，但很多实验证明引入文本的音素信息对说话人识别有帮助。
 
 #### 端到端方法
 输入一对语音段，模型输出相似度得分。
@@ -301,9 +301,9 @@ $$
 
 端到端系统最大的缺点是难以训练，包括样本对生成和模型难收敛。常用的可以有以下几类：
 
-Pairwise loss
+* Pairwise loss
 
-用一对样本对计算损失函数。典型包括：
+&emsp;&emsp;用一对样本对计算损失函数。典型包括：
 
 1. Binary cross-entropy loss
 
@@ -345,40 +345,40 @@ $$
 
 &emsp;&emsp;直接最小化$P_{fa}$和$P_{miss}$的加权和，作为目标函数。为了可导，使用sigmoid替代统计指标的指示函数。
 
-Triplet loss
+* Triplet loss
 
-由三条语料构成一个训练输入，其中两条来自同一个说话人，分别充当锚点语料和正语料，第三条来自不同说话人，充当负语料。
+&emsp;&emsp;由三条语料构成一个训练输入，其中两条来自同一个说话人，分别充当锚点语料和正语料，第三条来自不同说话人，充当负语料。
 
-triplet loss旨在于使锚点语料和正语料相似度更高，让锚点语料和负语料相似度下降。即旨在于：
+&emsp;&emsp;triplet loss旨在于使锚点语料和正语料相似度更高，让锚点语料和负语料相似度下降。即旨在于：
 
 $$
 s^{an}_n-s^{ap}_n+\zeta)\le0
 $$
 
-其中$s_n^{a*}$是两个语料间的相似度，一般是余弦相似度和欧氏距离。
+&emsp;&emsp;其中$s_n^{a*}$是两个语料间的相似度，一般是余弦相似度和欧氏距离。
 
-所以triplet loss的形态：
+&emsp;&emsp;所以triplet loss的形态：
 
 $$
 \mathcal{L}_{trip}=\sum^N_{n=1}\max(0,s^{an}_n-s^{ap}_n+\zeta)
 $$
 
-注意只有$\max(0,s^{an}_n-s^{ap}_n+\zeta) \gt 0$才对梯度有贡献。
+&emsp;&emsp;注意只有$\max(0,s^{an}_n-s^{ap}_n+\zeta) \gt 0$才对梯度有贡献。
 
-要选择有效的三样本，可以使用“hard negative”方法采样，分为两步：
+&emsp;&emsp;要选择有效的三样本，可以使用“hard negative”方法采样，分为两步：
 
 1. 随机采样同一个说话人的两个样本，用作锚点和正样本；
 2. 对每个锚点，从剩下的说话人样本中，随机选择一个满足$\max(0,s^{an}_n-s^{ap}_n+\zeta) \gt 0$的负样本。
 
-Quadruplet loss
+* Quadruplet loss
 
-四条语料构成一个训练输入，其中两条来自同一个说话人$\mathcal{X}_{same}$，另外两条来自另一个说话人$\mathcal{X}_{diff}$。
+&emsp;&emsp;四条语料构成一个训练输入，其中两条来自同一个说话人$\mathcal{X}_{same}$，另外两条来自另一个说话人$\mathcal{X}_{diff}$。
 
-四元损失函数可以看作最大化ROC曲线下某个指定区间的面积，即最大化pAUC。
+&emsp;&emsp;四元损失函数可以看作最大化ROC曲线下某个指定区间的面积，即最大化pAUC。
 
-Prototypical network loss
+* Prototypical network loss
 
-最初是用于few-shot learning的。
+&emsp;&emsp;最初是用于few-shot learning的。
 
 ## Speaker Identification
 说话人鉴别是说话人验证的泛化表示，多个说话人和特定单一说话人的区别。
@@ -400,7 +400,9 @@ Prototypical network loss
 
 ![image](/images/7pDhFEbWB1mD37zL1q-KihvWlWUeGOZUKcQZhgJdWjQ.png)
 
-### 分步式
+### 分步骤方法
+多个模块配合，一步步完成整个SD过程。
+
 ![image](/images/hxkuLiPEWS58FfttvpAFjrLBgiethD3jWO5P2a5eSmQ.png)
 
 大部分分布式说话人分离主要包含四个模块：
@@ -530,7 +532,6 @@ DANN（Domain-adversarial NN）是领域适应训练的一个具体实现，它�
 ![image](/images/fJJ5Vnz6WE2PqrRj9l2nw1gv1m-Nn2ycMWgicA4DwvY.png)
 
 #### ROC
-
 适用于衡量二分类系统的阈值变化影响。
 
 ROC曲线的坐标系，横坐标为假阳率（FPR，1-负样本的recall），纵坐标为真阳率（TPR，即正样本recall）。
@@ -544,7 +545,6 @@ FPR=\frac{FP}{FP+TN}=1-TNR
 $$
 
 #### EER
-
 等错误率代表FPR和FNR（1-TPR）相等的点，值越小越好。
 
 以一个门禁系统为例，EER平衡的是：
