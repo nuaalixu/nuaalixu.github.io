@@ -1,7 +1,7 @@
 ---
 layout: post
 category: Deep Learning
-tag: speaker verification
+tag: speaker recognization
 ---
 
 # 基于Softmax的训练准则
