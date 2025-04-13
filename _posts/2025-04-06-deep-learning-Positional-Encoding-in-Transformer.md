@@ -4,14 +4,19 @@ category: Deep Learning
 tag: Positional Encoding
 ---
 # Positional Encoding in Transformer
+
 ## 位置编码的意义
+
 对于Transformer模型来说，因为纯粹的Attention模块无法捕捉输入顺序的，即无法区分不同位置的Token，所以位置编码的加入是必不可少的。
+
 ## 位置编码基本特征
+
 1. 唯一性：不同位置的token的编码唯一；
 2. 相对性：任何长度的序列中，不同位置的token之间相对位置保持一致；
 3. 外推有界性：容易推广到未见过的长句，因此其值域应有界限。
 
 ## 位置编码分类
+
 位置编码有规则定义的，如Transformer利用三角函数公司去计算每个位置向量。也有通过参数学习的，如Bert给每个位置都用可学习的向量在预训练数据上训练，最后存储在位置词表中。
 但通常不以如何得到位置编码进行分类，而是以模型如何使用位置编码，分成两大类：
 * 绝对位置编码：建模每个输入的位置信息，然后将位置信息融入到输入中。
@@ -22,6 +27,7 @@ tag: Positional Encoding
 如果对某个token相对于其他token的相对位置建模，每个token前面最多有T-1个token，后面最多也有T-1个token，再包括自身，最多共2T-1个相对位置，得到位置编码形如$(2T-1, D)$。在Attention计算时，根据$q_i$和$k_j$的相对位置，给注意力得分加上对应的位置编码，这种方式属于相对位置编码。
 
 ## Sinusoidal Positional Encodings
+
 第t个Token的第i个维度的位置编码公式如下：
 
 $$
@@ -99,6 +105,7 @@ $$
 在使用时，直接将三角函数位置编码和token的embedding向量相加，送入注意力模块进行计算。
 
 ## Relative Positional Encodings
+
 广义上，在建模时考虑两个token间相对位置信息的编码，都属于相对位置编码。本章介绍两种具体的实现，分别来自于论文1 [Self-Attention with Relative Position Representation](https://arxiv.org/pdf/1803.02155v2)和论文2 [Transformer-XL: Attentive Language Models Beyond a Fixed-Length Context](https://arxiv.org/pdf/1901.02860)。
 
 ### Self-Attention with Relative Position Representation
@@ -128,6 +135,7 @@ $$
 此外，相对编码在不同的注意力头之间共享，以降低空间复杂度。
 
 ### Transformer-XL: Attentive Language Models Beyond a Fixed-Length Context
+
 论文2采用三角函数和可学习参数相结合的方式表示相对位置编码。
 
 当采用三角函数进行绝对位置编码后，注意力权重的计算，可以拆解如下：
@@ -159,7 +167,8 @@ $$
 
 和论文1相比，论文1仅拥有子项1和子项2，并且放弃了三角函数，也就放弃了由三角函数归纳偏差来带的泛化能力。
 
-# RoPE
+## RoPE
+
 RoPE在分类上也属于相对位置编码。
 
 未完待续...
