@@ -159,7 +159,7 @@ $$
 
 $$
 \begin{align*}
-A^{abs}_{i,j} &= E_{x_i}^T W^T_q W_{k,E} E_{x_j}+E_{x_i}^T W_q^T W_{k,R} R_{i-j}+u^T W_{k,E} E_{x_j}+v^T W_{k,R} R_{i-j}
+A^{rel}_{i,j} &= E_{x_i}^T W^T_q W_{k,E} E_{x_j}+E_{x_i}^T W_q^T W_{k,R} R_{i-j}+u^T W_{k,E} E_{x_j}+v^T W_{k,R} R_{i-j}
 \end{align*}
 $$
 
