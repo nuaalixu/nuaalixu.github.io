@@ -355,7 +355,7 @@ def demo_model_parallel(rank, world_size):
 ```
 调用的时候，单进程两卡，所以world size是ngpus的1/2。
 
-```Plain Text
+```python
 if __name__ == "__main__":
     n_gpus = torch.cuda.device_count()
     assert n_gpus >= 2, f"Requires at least 2 GPUs to run, but got {n_gpus}"
@@ -628,8 +628,6 @@ def rpc_sync(to, func, args=None, kwargs=None, timeout=UNSET_RPC_TIMEOUT):
     (...)
 ```
 返回值是`func`执行的结果。
-
-假设
 
 调用示例如下：
 
