@@ -167,8 +167,115 @@ $$
 
 和论文1相比，论文1仅拥有子项1和子项2，并且放弃了三角函数，也就放弃了由三角函数归纳偏差来带的泛化能力。
 
-## RoPE
+## Rotary Position Embedding
 
-RoPE在分类上也属于相对位置编码。
+RoPE (Rotary Position Embedding) 在分类上也属于相对位置编码。
 
-未完待续...
+在原始的 Transformer 或 BERT 中，位置编码是作为一个向量直接加到词嵌入向量上的。RoPE 不是把位置向量加进去，而是通过旋转矩阵对向量进行变换（即矩阵乘法）。
+
+标准的 Transformer 使用自注意力机制。计算注意力分数时，我们需要计算查询向量 $q_m$ 和键向量 $k_n$ 的内积。并且在使用绝对位置编码时， $q_m$ 和 $k_n$ 包含了各自独立的绝对位置信息（ m 和 n ）。
+
+作者希望注意力分数只依赖于词嵌入内容和相对距离。
+
+> In other words, we hope that the inner product encodes position information only in the relative form:
+
+这个期望可以通过以下公式来表示：
+
+$$
+\langle f_q(x_m, m), f_k(x_n, n) \rangle = g(x_m, x_n, m - n)
+$$
+
+接下来的目标就是找到一个等价的位置编码方式，从而使得上述关系成立。
+
+假定现在词嵌入向量的维度是两维 $d=2$，这样就可以利用上2维度平面上的向量的几何性质，然后论文中提出了一个满足上述关系的 f 和 g 的形式如下：
+
+$$
+\begin{align}
+f_q(x_m, m) = (W_qx_m)e^{im\theta} \\
+f_k(x_n, n) = (W_kx_n)e^{in\theta} \\
+g(x_m, x_n, m-n) = Re[(W_qx_m)(W_kx_n)*e^{i(m-n)\theta}]
+\end{align}
+$$
+
+这里的Re表示取复数的实部。
+
+$$
+\begin{align*}
+f_q(\boldsymbol{x}_m, m) &=
+\begin{pmatrix}
+\cos\ m\theta & -\sin\ m\theta \\
+\sin\ m\theta & \cos\ m\theta
+\end{pmatrix}
+\begin{pmatrix}
+W_q^{(1,1)} & W_q^{(1,2)} \\
+W_q^{(2,1)} & W_q^{(2,2)}
+\end{pmatrix}
+\begin{pmatrix}
+x_m^{(1)} \\
+x_m^{(2)}
+\end{pmatrix} \\
+&=
+\begin{pmatrix}
+\cos\ m\theta & -\sin\ m\theta \\
+\sin\ m\theta & \cos\ m\theta
+\end{pmatrix}
+\begin{pmatrix}
+q_m^{(1)} \\
+q_m^{(2)}
+\end{pmatrix}
+\end{align*}
+$$
+
+上述公式其实就是query向量乘以一个旋转矩阵。这就是该方法为什么叫做旋转位置编码的原因。
+
+同理， $f_k$ 也可以表示成类似旋转矩阵乘以 $k$ 的表示。
+
+最终 $g(x_m, x_n, m-n)$ 可以表示如下：
+
+$$
+\begin{align*}
+&g(\boldsymbol{x}_m, \boldsymbol{x}_n, m - n) \\
+&= \begin{pmatrix} q_m^{(1)} & q_m^{(2)} \end{pmatrix}
+   \begin{pmatrix}
+      \cos((m - n)\theta) & -\sin((m - n)\theta) \\
+      \sin((m - n)\theta) & \cos((m - n)\theta)
+   \end{pmatrix}
+   \begin{pmatrix} k_n^{(1)} \\ k_n^{(2)} \end{pmatrix}
+\end{align*}
+$$
+
+这里的 $\theta$ 论文里取了固定表示：
+
+$$
+\Theta = \left\{ \theta_i = 10000^{-2(i-1)/d}, i \in [1, 2, \ldots, d/2] \right\}
+$$
+
+接着将2维推广到任意维度。
+
+$$
+\mathbf{R}_{\Theta, m}^d =
+\begin{pmatrix}
+\cos m\theta_0 & -\sin m\theta_0 & 0 & 0 & \cdots & 0 & 0 \\
+\sin m\theta_0 & \cos m\theta_0 & 0 & 0 & \cdots & 0 & 0 \\
+0 & 0 & \cos m\theta_1 & -\sin m\theta_1 & \cdots & 0 & 0 \\
+0 & 0 & \sin m\theta_1 & \cos m\theta_1 & \cdots & 0 & 0 \\
+\vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\
+0 & 0 & 0 & 0 & \cdots & \cos m\theta_{d/2-1} & -\sin m\theta_{d/2-1} \\
+0 & 0 & 0 & 0 & \cdots & \sin m\theta_{d/2-1} & \cos m\theta_{d/2-1}
+\end{pmatrix}_{\mathbf{W}_m}
+$$
+
+总结来说，RoPE 的 self-attention 操作的流程是：对于 token 序列中的每个词嵌入向量，首先计算其对应的 query 和 key 向量，然后对每个 token 位置都计算对应的旋转位置编码，接着对每个 token 位置的 query 和 key 向量的元素按照 两两一组 应用旋转变换，最后再计算 query 和 key 之间的内积得到 self-attention 的计算结果。
+
+论文中下图直观的展示了旋转变换的过程。
+
+<img width="862" height="533" alt="image" src="https://github.com/user-attachments/assets/20152fda-4c72-4b0c-ba34-45b2f7ca0518" />
+
+总结：
+
+1- 旋转编码 RoPE 可以有效地保持位置信息的相对关系，即相邻位置的编码之间有一定的相似性，而远离位置的编码之间有一定的差异性。
+
+2- 旋转编码 RoPE 可以通过旋转矩阵来实现位置编码的外推，即可以通过旋转矩阵来生成超过预训练长度的位置编码。
+
+3- 旋转编码 RoPE 可以与线性注意力机制兼容，即不需要额外的计算或参数来实现相对位置编码。
+
