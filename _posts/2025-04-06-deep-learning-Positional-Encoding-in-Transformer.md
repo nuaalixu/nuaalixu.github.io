@@ -244,11 +244,7 @@ $$
 \end{align*}
 $$
 
-这里的 $\theta$ 论文里取了固定表示：
-
-$$
-\Theta = \left\{ \theta_i = 10000^{-2(i-1)/d}, i \in [1, 2, \ldots, d/2] \right\}
-$$
+这里的 $\theta$ 论文里取了固定表示，见后文。
 
 接着将2维推广到任意维度。
 
@@ -263,6 +259,12 @@ $$
 0 & 0 & 0 & 0 & \cdots & \cos m\theta_{d/2-1} & -\sin m\theta_{d/2-1} \\
 0 & 0 & 0 & 0 & \cdots & \sin m\theta_{d/2-1} & \cos m\theta_{d/2-1}
 \end{pmatrix}_{\mathbf{W}_m}
+$$
+
+这里的 $\Theta$ 是固定表示，随维度变化：
+
+$$
+\Theta = \left\{ \theta_i = 10000^{-2(i-1)/d}, i \in [1, 2, \ldots, d/2] \right\}
 $$
 
 总结来说，RoPE 的 self-attention 操作的流程是：对于 token 序列中的每个词嵌入向量，首先计算其对应的 query 和 key 向量，然后对每个 token 位置都计算对应的旋转位置编码，接着对每个 token 位置的 query 和 key 向量的元素按照 两两一组 应用旋转变换，最后再计算 query 和 key 之间的内积得到 self-attention 的计算结果。
