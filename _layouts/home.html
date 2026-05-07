@@ -10,9 +10,9 @@ layout: default
   {{ content }}
 
   {%- if site.posts.size > 0 -%}
+    {%- assign post_limit = site.home_post_limit | default: 5 -%}
     <h2 class="post-list-heading">{{ page.list_title | default: "Latest Posts" }}</h2>
     <ul class="post-list">
-      {%- assign post_limit = site.home_post_limit | default: 5 -%}
       {%- for post in site.posts limit:post_limit -%}
       <li>
         {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
@@ -28,6 +28,11 @@ layout: default
       </li>
       {%- endfor -%}
     </ul>
+    {%- if site.posts.size > post_limit -%}
+      <p style="margin-top: 0.5rem;">
+        <a href="{{ '/archive.html' | relative_url }}" style="font-size: 1.2rem; font-weight: 700;">More Posts</a>
+      </p>
+    {%- endif -%}
 
   {%- endif -%}
 
